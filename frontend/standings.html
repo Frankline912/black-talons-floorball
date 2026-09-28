@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Standings - DEKUT Floorball (Black Talons)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .section-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <a href="index.html" class="logo">DEKUT FLOORBALL (BLACK TALONS)</a>
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="players.html">Players</a></li>
+                <li><a href="matches.html">Matches</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="hero" style="padding: 4rem 2rem; text-align: center;">
+        <h1>League Standings</h1>
+        <p>Track the Black Talons and competitor rankings throughout the season.</p>
+    </section>
+
+    <!-- Standings Table Section -->
+    <section class="section-container">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Current League Table</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Team</th>
+                        <th>P</th>
+                        <th>W</th>
+                        <th>D</th>
+                        <th>L</th>
+                        <th>GF</th>
+                        <th>GA</th>
+                        <th>GD</th>
+                        <th>Pts</th>
+                    </tr>
+                </thead>
+                <tbody id="standings-table-body">
+                    <tr>
+                        <td colspan="10" style="text-align: center;">Loading standings from database...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Footer with Dynamic Instagram Link -->
+    <footer>
+        <div style="margin-bottom: 1rem; text-align: center;">
+            <a id="footer-instagram-link" href="https://instagram.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: bold; font-size: 1.1rem;">
+                📷 Follow us on Instagram
+            </a>
+        </div>
+        <p style="text-align: center; color: #64748b; font-size: 0.9rem;">&copy; 2026 DEKUT Floorball (Black Talons). All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript to Fetch Standings & Socials -->
+    <script src="js/api.js"></script>
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        // Mobile Menu Toggle
+        document.getElementById("mobile-menu").addEventListener("click", () => {
+            const nav = document.querySelector("nav ul");
+            nav.classList.toggle("showing");
+        });
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            // 1. Fetch League Standings
+            const tbody = document.getElementById("standings-table-body");
+            try {
+                const response = await fetch(`${API_URL}/standings/`);
+                const standings = await response.json();
+
+                if (standings && standings.length > 0) {
+                    tbody.innerHTML = standings.map((s, index) => {
+                        const gd = s.goals_for - s.goals_against;
+                        const isBlackTalons = s.team_name.toLowerCase().includes("black talons") || s.team_name.toLowerCase().includes("dekut");
+                        const rowStyle = isBlackTalons ? "background-color: #f0fdf4; font-weight: bold;" : "";
+                        
+                        return `
+                            <tr style="${rowStyle}">
+                                <td>${index + 1}</td>
+                                <td>${s.team_name}</td>
+                                <td>${s.played}</td>
+                                <td>${s.won}</td>
+                                <td>${s.drawn}</td>
+                                <td>${s.lost}</td>
+                                <td>${s.goals_for}</td>
+                                <td>${s.goals_against}</td>
+                                <td>${gd > 0 ? '+' + gd : gd}</td>
+                                <td style="color: var(--primary-color);">${s.points}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center;">No standings data available yet.</td></tr>`;
+                }
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: #dc2626;">Failed to load league standings from server.</td></tr>`;
+            }
+
+            // 2. Fetch Dynamic Instagram Footer Link
+            try {
+                const res = await fetch(`${API_URL}/socials/`);
+                const socials = await res.json();
+                const insta = socials.find(s => s.platform.toLowerCase() === "instagram");
+                if (insta && insta.url) {
+                    const linkEl = document.getElementById("footer-instagram-link");
+                    if (linkEl) linkEl.href = insta.url;
+                }
+            } catch (e) {
+                // Fails safely if offline
+            }
+        });
+    </script>
+</body>
+</html>

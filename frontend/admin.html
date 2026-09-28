@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DEKUT Floorball (Black Talons)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .auth-container, .dashboard-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 1rem;
+        }
+        .hidden { display: none !important; }
+        .alert { padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px; font-size: 0.9rem; }
+        .alert-error { background-color: #fee2e2; color: #991b1b; }
+        .alert-success { background-color: #dcfce7; color: #166534; }
+        .admin-section { margin-bottom: 3rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <a href="index.html" class="logo"> BLACK TALONS</a>
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="players.html">Team</a></li>
+                <li><a href="matches.html">Matches</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Login Section -->
+    <div id="login-view" class="auth-container" style="max-width: 500px;">
+        <h2 style="margin-bottom: 1.5rem; color: var(--primary-color);">Admin Login</h2>
+        <div id="login-alert" class="alert hidden"></div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="admin@blacktalons.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">Log In</button>
+        </form>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-view" class="dashboard-container hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary-color);">Master Admin Dashboard</h2>
+            <button id="logout-btn" class="btn" style="background-color: #dc2626; padding: 0.5rem 1rem;">Log Out</button>
+        </div>
+
+        <div id="dashboard-alert" class="alert hidden"></div>
+
+        <!-- Social Media Management (Instagram) -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Social Media (Instagram)</h3>
+            <form id="update-social-form">
+                <div class="form-group">
+                    <label>Instagram Profile URL</label>
+                    <input type="url" id="instagram-url" required placeholder="https://instagram.com/dekut_floorball">
+                </div>
+                <button type="submit" class="btn">Save Instagram Link</button>
+            </form>
+        </div>
+
+        <!-- 1. Player Management -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Manage Players</h3>
+            <form id="add-player-form">
+                <div class="form-group"><label>Player Name</label><input type="text" id="player-name" required></div>
+                <div class="form-group"><label>Position</label><input type="text" id="player-position" required></div>
+                <div class="form-group"><label>Jersey Number</label><input type="number" id="jersey-number" required></div>
+                <div class="form-group"><label>Matches Played</label><input type="number" id="player-matches" value="0" min="0"></div>
+                <div class="form-group"><label>Goals</label><input type="number" id="player-goals" value="0" min="0"></div>
+                <div class="form-group"><label>Assists</label><input type="number" id="player-assists" value="0" min="0"></div>
+                <div class="form-group"><label>Bio</label><textarea id="player-bio" rows="2"></textarea></div>
+                <button type="submit" class="btn">Add Player</button>
+            </form>
+        </div>
+
+        <!-- 2. Match Management -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Manage Matches</h3>
+            <form id="add-match-form">
+                <div class="form-group"><label>Opponent</label><input type="text" id="match-opponent" required></div>
+                <div class="form-group"><label>Date</label><input type="date" id="match-date" required></div>
+                <div class="form-group"><label>Time</label><input type="text" id="match-time" required placeholder="14:00"></div>
+                <div class="form-group"><label>Venue</label><input type="text" id="match-venue" required></div>
+                <div class="form-group"><label>Competition</label><input type="text" id="match-competition" required></div>
+                <button type="submit" class="btn">Add Match</button>
+            </form>
+            <button id="delete-all-matches" class="btn" style="background-color: #b91c1c; margin-top: 1rem; font-size: 0.85rem;">Delete All Matches</button>
+        </div>
+
+        <!-- 3. News Management -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Publish Club News</h3>
+            <form id="add-news-form">
+                <div class="form-group"><label>Article Title</label><input type="text" id="news-title" required></div>
+                <div class="form-group"><label>Content</label><textarea id="news-content" rows="3" required></textarea></div>
+                <div class="form-group"><label>Image URL (Optional)</label><input type="text" id="news-image"></div>
+                <div class="form-group"><label>Attach PDF Document (Optional)</label><input type="file" id="news-pdf" accept="application/pdf"></div>
+                <button type="submit" class="btn">Publish News</button>
+            </form>
+            <button id="delete-all-news" class="btn" style="background-color: #b91c1c; margin-top: 1rem; font-size: 0.85rem;">Delete All News</button>
+        </div>
+
+        <!-- 4. Training Schedule Management -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Training Schedule</h3>
+            <form id="add-training-form">
+                <div class="form-group"><label>Session Title</label><input type="text" id="training-title" required></div>
+                <div class="form-group"><label>Start Time / Details</label><input type="text" id="training-start" required placeholder="10:00 AM"></div>
+                <div class="form-group"><label>End Time</label><input type="text" id="training-end" required placeholder="12:00 PM"></div>
+                <div class="form-group"><label>Location</label><input type="text" id="training-location" required></div>
+                <button type="submit" class="btn">Create Training Session</button>
+            </form>
+            <button id="delete-all-training" class="btn" style="background-color: #b91c1c; margin-top: 1rem; font-size: 0.85rem;">Delete All Training Schedules</button>
+        </div>
+
+        <!-- 5. Gallery & Trophy Room Management -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Upload Trophy / Team Photo</h3>
+            <form id="add-gallery-form">
+                <div class="form-group">
+                    <label>Photo Title / Event</label>
+                    <input type="text" id="gallery-title" required placeholder="e.g., Regional Champions 2026">
+                </div>
+                <div class="form-group">
+                    <label>Select Image File</label>
+                    <input type="file" id="gallery-file" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn">Upload Trophy Photo</button>
+            </form>
+        </div>
+
+        <!-- 6. View Contact Messages -->
+        <div class="admin-section">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Fan Contact Inquiries</h3>
+            <button id="load-messages-btn" class="btn" style="background-color: #0284c7; margin-bottom: 1rem;">Load Contact Messages</button>
+            <div id="messages-container" style="background: #f8fafc; padding: 1rem; border-radius: 4px; max-height: 200px; overflow-y: auto;">
+                <p style="color: #64748b;">Click the button above to fetch messages.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 DEKUT Floorball (Black Talons). All rights reserved.</p>
+    </footer>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+        const loginView = document.getElementById("login-view");
+        const dashboardView = document.getElementById("dashboard-view");
+        const loginForm = document.getElementById("login-form");
+        const loginAlert = document.getElementById("login-alert");
+        const dashboardAlert = document.getElementById("dashboard-alert");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        if (localStorage.getItem("token")) showDashboard();
+
+        function showAlert(element, message, type) {
+            element.textContent = message;
+            element.className = `alert alert-${type}`;
+            element.classList.remove("hidden");
+            setTimeout(() => element.classList.add("hidden"), 4000);
+        }
+
+        function showDashboard() {
+            loginView.classList.add("hidden");
+            dashboardView.classList.remove("hidden");
+        }
+
+        // Login Handler
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new URLSearchParams();
+            formData.append("username", document.getElementById("email").value);
+            formData.append("password", document.getElementById("password").value);
+
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem("token", data.access_token);
+                    showDashboard();
+                } else {
+                    showAlert(loginAlert, data.detail || "Login failed", "error");
+                }
+            } catch (err) {
+                showAlert(loginAlert, "Server connection error", "error");
+            }
+        });
+
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            dashboardView.classList.add("hidden");
+            loginView.classList.remove("hidden");
+        });
+
+        // Social Media Link Handler
+        document.getElementById("update-social-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            const payload = {
+                platform: "Instagram",
+                url: document.getElementById("instagram-url").value
+            };
+            
+            try {
+                const res = await fetch(`${API_URL}/socials/`, {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json", 
+                        "Authorization": `Bearer ${token}` 
+                    },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) { 
+                    showAlert(dashboardAlert, "Instagram link updated successfully!", "success"); 
+                } else { 
+                    showAlert(dashboardAlert, "Failed to update Instagram link", "error"); 
+                }
+            } catch (err) {
+                showAlert(dashboardAlert, "Server connection error", "error");
+            }
+        });
+
+        // 1. Add Player
+        document.getElementById("add-player-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            const payload = {
+                name: document.getElementById("player-name").value,
+                position: document.getElementById("player-position").value,
+                jersey_number: parseInt(document.getElementById("jersey-number").value),
+                matches_played: parseInt(document.getElementById("player-matches").value) || 0,
+                goals: parseInt(document.getElementById("player-goals").value) || 0,
+                assists: parseInt(document.getElementById("player-assists").value) || 0,
+                bio: document.getElementById("player-bio").value
+            };
+            const res = await fetch(`${API_URL}/players/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) { showAlert(dashboardAlert, "Player added!", "success"); e.target.reset(); }
+            else { showAlert(dashboardAlert, "Failed to add player", "error"); }
+        });
+
+        // 2. Add Match & Delete All
+        document.getElementById("add-match-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            const payload = {
+                opponent: document.getElementById("match-opponent").value,
+                match_date: document.getElementById("match-date").value,
+                match_time: document.getElementById("match-time").value,
+                venue: document.getElementById("match-venue").value,
+                competition: document.getElementById("match-competition").value,
+                status: "Upcoming"
+            };
+            const res = await fetch(`${API_URL}/matches/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) { showAlert(dashboardAlert, "Match added!", "success"); e.target.reset(); }
+            else { showAlert(dashboardAlert, "Failed to add match", "error"); }
+        });
+
+        document.getElementById("delete-all-matches").addEventListener("click", async () => {
+            if(confirm("Are you sure you want to delete all matches?")) {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`${API_URL}/matches/`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if(res.ok) showAlert(dashboardAlert, "All matches cleared.", "success");
+            }
+        });
+
+        // 3. Add News & Delete All (Updated for FormData & PDF Uploads)
+        document.getElementById("add-news-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            
+            const formData = new FormData();
+            formData.append("title", document.getElementById("news-title").value);
+            formData.append("content", document.getElementById("news-content").value);
+            
+            const imageUrl = document.getElementById("news-image").value;
+            if (imageUrl) {
+                formData.append("image_url", imageUrl);
+            }
+            
+            const pdfInput = document.getElementById("news-pdf").files[0];
+            if (pdfInput) {
+                formData.append("pdf_file", pdfInput);
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/news/`, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${token}` },
+                    body: formData
+                });
+                if (res.ok) { 
+                    showAlert(dashboardAlert, "News and PDF successfully published!", "success"); 
+                    e.target.reset(); 
+                } else { 
+                    const errData = await res.json();
+                    showAlert(dashboardAlert, errData.detail || "Failed to publish news", "error"); 
+                }
+            } catch (error) {
+                showAlert(dashboardAlert, "Server connection error", "error");
+            }
+        });
+
+        document.getElementById("delete-all-news").addEventListener("click", async () => {
+            if(confirm("Are you sure you want to delete all news?")) {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`${API_URL}/news/`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if(res.ok) showAlert(dashboardAlert, "All news articles cleared.", "success");
+            }
+        });
+
+        // 4. Add Training & Delete All
+        document.getElementById("add-training-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            const payload = {
+                title: document.getElementById("training-title").value,
+                start_time: document.getElementById("training-start").value,
+                end_time: document.getElementById("training-end").value,
+                location: document.getElementById("training-location").value
+            };
+            const res = await fetch(`${API_URL}/training/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) { showAlert(dashboardAlert, "Training session created!", "success"); e.target.reset(); }
+            else { showAlert(dashboardAlert, "Failed to create training", "error"); }
+        });
+
+        document.getElementById("delete-all-training").addEventListener("click", async () => {
+            if(confirm("Are you sure you want to clear all training sessions?")) {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`${API_URL}/training/`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if(res.ok) showAlert(dashboardAlert, "All training sessions cleared.", "success");
+            }
+        });
+
+        // 5. Add Gallery / Trophy Photo
+        document.getElementById("add-gallery-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            
+            const formData = new FormData();
+            formData.append("title", document.getElementById("gallery-title").value);
+            
+            const fileInput = document.getElementById("gallery-file").files[0];
+            if (fileInput) {
+                formData.append("image_file", fileInput);
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/gallery/`, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${token}` },
+                    body: formData
+                });
+                
+                if (res.ok) {
+                    showAlert(dashboardAlert, "Trophy photo successfully uploaded!", "success");
+                    e.target.reset();
+                } else {
+                    const errData = await res.json();
+                    showAlert(dashboardAlert, errData.detail || "Failed to upload photo", "error");
+                }
+            } catch (error) {
+                showAlert(dashboardAlert, "Server connection error", "error");
+            }
+        });
+
+        // 6. Load Contact Messages
+        document.getElementById("load-messages-btn").addEventListener("click", async () => {
+            const token = localStorage.getItem("token");
+            const container = document.getElementById("messages-container");
+            try {
+                const res = await fetch(`${API_URL}/contact/`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const messages = await res.json();
+                if(messages.length > 0) {
+                    container.innerHTML = messages.map(m => `
+                        <div style="border-bottom: 1px solid #cbd5e1; padding: 0.5rem 0;">
+                            <strong>${m.name} (${m.email})</strong>: <p>${m.message}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = "<p>No messages received yet.</p>";
+                }
+            } catch(e) {
+                container.innerHTML = "<p style='color:red;'>Failed to load contact messages.</p>";
+            }
+        });
+    </script>
+</body>
+</html>

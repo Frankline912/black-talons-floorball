@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Roster - DEKUT Floorball (Black Talons)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container { max-width: 1100px; margin: auto; padding: 2rem 1rem; }
+        .section-title { text-align: center; margin-bottom: 2rem; color: var(--primary-color); }
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .player-card {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .player-card h3 { color: var(--primary-color); margin-bottom: 0.5rem; }
+        .player-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <a href="index.html" class="logo"> BLACK TALONS</a>
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="players.html" class="active">Team</a></li>
+                <li><a href="matches.html">Matches</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <h2 class="section-title">Meet the Black Talons Squad</h2>
+        <div id="players-container" class="players-grid">
+            <p style="text-align: center; grid-column: 1 / -1; color: #64748b;">Loading team roster...</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="margin-bottom: 1rem; text-align: center;">
+            <a id="footer-instagram-link" href="https://instagram.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: bold; font-size: 1.1rem;">
+                📷 Follow us on Instagram
+            </a>
+        </div>
+        <p style="text-align: center;">&copy; 2026 DEKUT Floorball (Black Talons). All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        // Mobile Menu Toggle
+        document.getElementById("mobile-menu").addEventListener("click", () => {
+            const nav = document.querySelector("nav ul");
+            nav.classList.toggle("showing");
+        });
+
+        // Fetch Players & Dynamic Instagram Link on Page Load
+        document.addEventListener("DOMContentLoaded", async () => {
+            // 1. Fetch Players Roster
+            try {
+                const res = await fetch(`${API_URL}/players/`);
+                const players = await res.json();
+                const container = document.getElementById("players-container");
+                
+                if (players.length > 0) {
+                    container.innerHTML = players.map(p => `
+                        <div class="player-card">
+                            <h3>#${p.jersey_number} - ${p.name}</h3>
+                            <p style="color: #64748b; font-weight: 500; margin-bottom: 0.5rem;">${p.position}</p>
+                            <p style="font-size: 0.95rem; color: #334155; margin-bottom: 1rem;">${p.bio || 'Dedicated Black Talons team member.'}</p>
+                            <div class="player-stats">
+                                <div><strong>${p.matches_played}</strong><br><span style="font-size:0.75rem; color:#64748b;">Matches</span></div>
+                                <div><strong>${p.goals}</strong><br><span style="font-size:0.75rem; color:#64748b;">Goals</span></div>
+                                <div><strong>${p.assists}</strong><br><span style="font-size:0.75rem; color:#64748b;">Assists</span></div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = "<p style='text-align: center; grid-column: 1 / -1; color: #64748b;'>No players added to the roster yet.</p>";
+                }
+            } catch (e) {
+                document.getElementById("players-container").innerHTML = "<p style='text-align: center; grid-column: 1 / -1; color: #dc2626;'>Failed to load players from server.</p>";
+            }
+
+            // 2. Fetch Dynamic Instagram Footer Link
+            try {
+                const res = await fetch(`${API_URL}/socials/`);
+                const socials = await res.json();
+                const insta = socials.find(s => s.platform.toLowerCase() === "instagram");
+                if (insta && insta.url) {
+                    const linkEl = document.getElementById("footer-instagram-link");
+                    if (linkEl) linkEl.href = insta.url;
+                }
+            } catch (e) {
+                // Fails safely if offline
+            }
+        });
+    </script>
+</body>
+</html>

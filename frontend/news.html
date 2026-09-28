@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club News - DEKUT Floorball (Black Talons)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .section-container { max-width: 1100px; margin: 3rem auto; padding: 0 1rem; }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+        }
+        .card h3 { color: var(--primary-color); margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">DEKUT FLOORBALL (BLACK TALONS)</a>
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="players.html">Players</a></li>
+                <li><a href="matches.html">Matches</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" style="padding: 4rem 2rem; text-align: center;">
+        <h1>Club News & Announcements</h1>
+        <p>Catch up on all the latest updates, match recaps, and club notices.</p>
+    </section>
+
+    <section class="section-container">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 2rem; color: var(--primary-color);">Latest Articles</h2>
+        <div id="news-container" class="grid-container">
+            <p style="text-align: center; grid-column: 1 / -1;">Loading news articles...</p>
+        </div>
+    </section>
+
+    <footer>
+        <div style="margin-bottom: 1rem; text-align: center;">
+            <a id="footer-instagram-link" href="https://instagram.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: bold; font-size: 1.1rem;">
+                📷 Follow us on Instagram
+            </a>
+        </div>
+        <p style="text-align: center; color: #64748b; font-size: 0.9rem;">&copy; 2026 DEKUT Floorball (Black Talons). All rights reserved.</p>
+    </footer>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+        document.getElementById("mobile-menu").addEventListener("click", () => {
+            document.querySelector("nav ul").classList.toggle("showing");
+        });
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.getElementById("news-container");
+            try {
+                const res = await fetch(`${API_URL}/news/`);
+                const articles = await res.json();
+                if (articles.length > 0) {
+                    container.innerHTML = articles.map(n => `
+                        <div class="card">
+                            ${n.image_url ? `<img src="${n.image_url}" alt="News Image" style="width:150px; height:150px; object-fit:cover; border-radius:4px; margin-bottom:1rem;">` : ''}
+                            <h3>${n.title}</h3>
+                            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Published on: ${new Date(n.created_at).toLocaleDateString()}</p>
+                            <p style="color: #334155; line-height: 1.5; margin-bottom: 1rem;">${n.content}</p>
+                            ${n.pdf_url ? `<a href="${n.pdf_url}" target="_blank" class="btn" style="padding: 0.4rem 0.8rem; font-size:0.9rem;">Download PDF Document</a>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = "<p style='text-align: center; grid-column: 1 / -1;'>No news articles published yet.</p>";
+                }
+            } catch (e) {
+                container.innerHTML = "<p style='text-align: center; grid-column: 1 / -1; color: #dc2626;'>Failed to load news articles.</p>";
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/socials/`);
+                const socials = await res.json();
+                const insta = socials.find(s => s.platform.toLowerCase() === "instagram");
+                if (insta && insta.url) document.getElementById("footer-instagram-link").href = insta.url;
+            } catch (e) {}
+        });
+    </script>
+</body>
+</html>

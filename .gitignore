@@ -1,0 +1,11 @@
+# Ignore the virtual environment
+.venv/
+backend/.venv/
+
+# Ignore local databases
+*.db
+*.sqlite3
+
+# Ignore Python cache
+__pycache__/
+*.pyc

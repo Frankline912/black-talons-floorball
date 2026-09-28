@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEKUT Floorball (Black Talons) - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/hero-bg.jpg') no-repeat center center/cover;
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        .container { max-width: 1100px; margin: auto; padding: 3rem 1rem; }
+        .section-title { text-align: center; margin-bottom: 2rem; color: var(--primary-color); }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            background: var(--white);
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-card h3 { color: var(--primary-color); margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar (5 Core Items) -->
+    <header>
+        <a href="index.html" class="logo">BLACK TALONS</a>
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="players.html">Team</a></li>
+                <li><a href="matches.html">Matches</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">DEKUT Floorball - Black Talons</h1>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">Official home of Dedan Kimathi University of Technology Floorball Club. Competitive, disciplined, and driven.</p>
+        <a href="matches.html" class="btn" style="padding: 0.75rem 1.5rem; font-size: 1rem;">View Upcoming Matches</a>
+    </section>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <h2 class="section-title">Welcome to the DEKUT Floorball Club (Black Talons)</h2>
+        <p style="text-align: center; max-width: 750px; margin: 0 auto 3rem auto; color: #475569; font-size: 1.1rem; line-height: 1.6;">
+            We are the Black Talons. Explore our competitive squad roster, check out upcoming fixtures, track match standings, and stay updated with official club news, training schedules, and trophy gallery announcements.
+        </p>
+
+        <!-- Feature Cards Grid (Includes all 9 sections total) -->
+        <div class="features-grid">
+            <!-- 1. Team Roster -->
+            <div class="feature-card">
+                <h3>Team Roster</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Meet our talented players, view jersey numbers, positions, and stats.</p>
+                <a href="players.html" class="btn" style="background-color: #0284c7;">View Roster</a>
+            </div>
+
+            <!-- 2. Match Schedules -->
+            <div class="feature-card">
+                <h3>Match Schedules</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Stay updated on upcoming fixtures, competition venues, and results.</p>
+                <a href="matches.html" class="btn" style="background-color: #0284c7;">View Matches</a>
+            </div>
+
+            <!-- 3. League Standings -->
+            <div class="feature-card">
+                <h3>League Standings</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Track the Black Talons and competitor rankings throughout the season.</p>
+                <a href="standings.html" class="btn" style="background-color: #0284c7;">View Standings</a>
+            </div>
+
+            <!-- 4. Training Schedule -->
+            <div class="feature-card">
+                <h3>Training Schedule</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Check out our weekly practice sessions, times, and training venues.</p>
+                <a href="training.html" class="btn" style="background-color: #0284c7;">View Training</a>
+            </div>
+
+            <!-- 5. Club News -->
+            <div class="feature-card">
+                <h3>Club News</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Catch up on all the latest updates, match recaps, and announcements.</p>
+                <a href="news.html" class="btn" style="background-color: #0284c7;">Read News</a>
+            </div>
+
+            <!-- 6. Gallery & Trophies -->
+            <div class="feature-card">
+                <h3>Trophy Gallery</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Relive our best moments, match highlights, and championship wins.</p>
+                <a href="gallery.html" class="btn" style="background-color: #0284c7;">View Gallery</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer with Dynamic Instagram Link -->
+    <footer>
+        <div style="margin-bottom: 1rem; text-align: center;">
+            <a id="footer-instagram-link" href="https://instagram.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: bold; font-size: 1.1rem;">
+                📷 Follow us on Instagram
+            </a>
+        </div>
+        <p style="text-align: center; color: #64748b; font-size: 0.9rem;">&copy; 2026 DEKUT Floorball (Black Talons). All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        // Mobile Menu Toggle
+        document.getElementById("mobile-menu").addEventListener("click", () => {
+            const nav = document.querySelector("nav ul");
+            nav.classList.toggle("showing");
+        });
+
+        // Automatically fetch the dynamic Instagram link from the backend on page load
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch(`${API_URL}/socials/`);
+                const socials = await res.json();
+                const insta = socials.find(s => s.platform.toLowerCase() === "instagram");
+                if (insta && insta.url) {
+                    const linkEl = document.getElementById("footer-instagram-link");
+                    if (linkEl) linkEl.href = insta.url;
+                }
+            } catch (e) {
+                // Fails safely if the backend server is offline
+            }
+        });
+    </script>
+</body>
+</html>
