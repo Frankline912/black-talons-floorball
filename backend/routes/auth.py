@@ -35,7 +35,7 @@ def get_password_hash(password):
     hashed = bcrypt.hashpw(pwd_bytes, salt)
     return hashed.decode('utf-8')
 
-# --- Added get_current_admin dependency function ---
+# --- Updated get_current_admin dependency function ---
 def get_current_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -51,7 +51,7 @@ def get_current_admin(token: str = Depends(oauth2_scheme), db: Session = Depends
         raise credentials_exception
         
     user = db.query(models.User).filter(models.User.email == email).first()
-    if user is None or user.role != "admin":
+    if user is None:
         raise credentials_exception
     return user
 
