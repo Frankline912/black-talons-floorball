@@ -1,4 +1,4 @@
-const API_URL = "https://black-talons-floorball-dekut.onrender.com";
+const API_URL = "https://black-talons-floorball-1.onrender.com";
 
 // Fetch all players
 async function fetchPlayers() {
