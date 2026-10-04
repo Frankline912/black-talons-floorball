@@ -59,7 +59,9 @@
     </footer>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        // Updated to point to your live Render backend
+        const API_URL = "https://black-talons-floorball-dekut.onrender.com";
+
         document.getElementById("mobile-menu").addEventListener("click", () => {
             document.querySelector("nav ul").classList.toggle("showing");
         });
@@ -72,11 +74,11 @@
                 if (articles.length > 0) {
                     container.innerHTML = articles.map(n => `
                         <div class="card">
-                            ${n.image_url ? `<img src="${n.image_url}" alt="News Image" style="width:150px; height:150px; object-fit:cover; border-radius:4px; margin-bottom:1rem;">` : ''}
+                            ${n.image_url ? `<img src="${n.image_url}" alt="News Image" style="width:100%; height:180px; object-fit:cover; border-radius:4px; margin-bottom:1rem;">` : ''}
                             <h3>${n.title}</h3>
                             <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Published on: ${new Date(n.created_at).toLocaleDateString()}</p>
                             <p style="color: #334155; line-height: 1.5; margin-bottom: 1rem;">${n.content}</p>
-                            ${n.pdf_url ? `<a href="${n.pdf_url}" target="_blank" class="btn" style="padding: 0.4rem 0.8rem; font-size:0.9rem;">Download PDF Document</a>` : ''}
+                            ${n.pdf_url ? `<a href="${n.pdf_url}" target="_blank" class="btn" style="padding: 0.4rem 0.8rem; font-size:0.9rem; display: inline-block; text-align: center;">Download PDF Document</a>` : ''}
                         </div>
                     `).join('');
                 } else {

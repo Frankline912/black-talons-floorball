@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://black-talons-floorball-dekut.onrender.com";
 
 // Fetch all players
 async function fetchPlayers() {
@@ -49,6 +49,7 @@ async function submitContactForm(formData) {
         throw error;
     }
 }
+
 // Fetch all training schedules
 async function fetchTraining() {
     try {

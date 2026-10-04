@@ -44,7 +44,7 @@
 
     <!-- Navigation Bar -->
     <header>
-        <a href="index.html" class="logo">DEKUT FLOORBALL (BLACK TALONS)</a>
+        <a href="index.html" class="logo">BLACK TALONS</a>
         <div class="menu-toggle" id="mobile-menu">☰</div>
         <nav>
             <ul>
@@ -97,7 +97,9 @@
     <!-- JavaScript to Handle Submission & Dynamic Footer -->
     <script src="js/api.js"></script>
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        // Updated to point to your live Render backend
+        const API_URL = "https://black-talons-floorball-dekut.onrender.com";
+        
         const contactForm = document.getElementById("contact-form");
         const contactAlert = document.getElementById("contact-alert");
 
@@ -117,8 +119,14 @@
             };
 
             try {
-                const response = await submitContactForm(formData);
-                if (response) {
+                // If submitContactForm uses API_URL internally, make sure it references the global API_URL or fetch directly here:
+                const res = await fetch(`${API_URL}/contact/`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+
+                if (res.ok) {
                     contactAlert.textContent = "Thank you! Your message has been sent successfully.";
                     contactAlert.className = "alert alert-success";
                     contactAlert.classList.remove("hidden");

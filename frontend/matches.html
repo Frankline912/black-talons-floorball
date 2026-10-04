@@ -17,15 +17,15 @@
 
     <!-- Navigation Bar -->
     <header>
-        <a href="index.html" class="logo"> DEKUT FLOORBALL (BLACK TALONS)</a>
+        <a href="index.html" class="logo">BLACK TALONS</a>
         <div class="menu-toggle" id="mobile-menu">☰</div>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-        <li><a href="players.html">Players</a></li>
-        <li><a href="matches.html">Matches</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="admin.html">Admin</a></li>
+                <li><a href="players.html">Players</a></li>
+                <li><a href="matches.html" class="active">Matches</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -57,7 +57,8 @@
     <!-- JavaScript to Fetch Live Matches & Dynamic Footer -->
     <script src="js/api.js"></script>
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        // Updated to point to your live Render backend
+        const API_URL = "https://black-talons-floorball-dekut.onrender.com";
 
         // Mobile Menu Toggle
         document.getElementById("mobile-menu").addEventListener("click", () => {
@@ -66,10 +67,17 @@
         });
 
         document.addEventListener("DOMContentLoaded", async () => {
-            // 1. Fetch Matches
+            // 1. Fetch Matches (Directly querying the backend API_URL if fetchMatches isn't defined globally)
             const container = document.getElementById("all-matches-container");
             try {
-                const matches = await fetchMatches();
+                let matches = [];
+                // Fallback check if fetchMatches function exists in api.js, otherwise fetch directly
+                if (typeof fetchMatches === "function") {
+                    matches = await fetchMatches();
+                } else {
+                    const res = await fetch(`${API_URL}/matches/`);
+                    matches = await res.json();
+                }
 
                 if (matches && matches.length > 0) {
                     container.innerHTML = matches.map(m => `
