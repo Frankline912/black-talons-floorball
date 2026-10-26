@@ -17,8 +17,15 @@ body {
     background-color: var(--bg-light);
     color: var(--text-color);
     line-height: 1.6;
-}
 
+    /* Background Logo Overlay */
+    background-image: url('../floorball team logo.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: 450px;
+    background-blend-mode: soft-light;
+}    
 /* Navigation */
 header {
     background-color: var(--primary-color);
@@ -52,7 +59,8 @@ nav ul li a {
     transition: color 0.3s;
 }
 
-nav ul li a:hover {
+nav ul li a:hover,
+nav ul li a.active {
     color: var(--accent-color);
 }
 
@@ -122,6 +130,13 @@ section {
     color: var(--primary-color);
 }
 
+.card img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+}
+
 /* Footer */
 footer {
     background-color: var(--primary-color);
@@ -130,6 +145,7 @@ footer {
     padding: 2rem;
     margin-top: 3rem;
 }
+
 /* Mobile Navigation & Hamburger */
 .menu-toggle {
     display: none;
@@ -155,7 +171,7 @@ footer {
         gap: 1.2rem;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    nav ul.active {
+    nav ul.showing {
         display: flex;
     }
 }
